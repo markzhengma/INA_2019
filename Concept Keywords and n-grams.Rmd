@@ -1,0 +1,43 @@
+---
+title: "Concept Keywords and n-grams"
+author: "JuanD"
+date: "3/29/2019"
+output: html_document
+---
+Computer Science Keywords - The Top Trends in Computer Science are:
+1. Artificial Intelligence and Robotics
+  1. https://www.sciencedirect.com/science/article/pii/S0004370216300790
+  2. https://www.sciencedirect.com/science/article/pii/S0004370298000551
+  3. https://www.sciencedirect.com/science/article/pii/S0004370207000793 
+  4. https://www.sciencedirect.com/science/article/pii/S0004370297000635 
+  5. https://www.sciencedirect.com/science/article/pii/S0004370211000178 
+  
+2. Big Data Analytics
+  1. https://www.sciencedirect.com/science/article/pii/S0360835218303760 
+  2. https://www.sciencedirect.com/science/article/pii/S0167739X17307446 
+  3. https://www.sciencedirect.com/science/article/pii/S074756321830414X 
+  4. https://www.sciencedirect.com/science/article/pii/S0007681317301325 
+  5. https://www.sciencedirect.com/science/article/pii/S0740624X18302545 
+  
+3. Computer Assisted Education 
+  1. https://www.sciencedirect.com/science/article/pii/S1877042812024007 
+  2. https://www.sciencedirect.com/science/article/pii/S1877042812024007 
+  3. https://www.sciencedirect.com/science/article/pii/S1043951X15001133 
+  4. https://www.sciencedirect.com/science/article/pii/S1877042813008276 
+  5. https://www.sciencedirect.com/science/article/pii/B9780124158733000213 
+  
+4. Cybersecurity 
+  1. https://www.sciencedirect.com/science/article/pii/S0268401218302093 
+  2. https://www.sciencedirect.com/science/article/pii/S0267364918301705
+  3. https://www.sciencedirect.com/science/article/pii/B9780128148167000054
+  4. https://www.sciencedirect.com/science/article/pii/S026840121830077X 
+  5. https://www.sciencedirect.com/science/article/pii/S0378512218301658 
+```{r setup, include=FALSE}
+#Top Computer Science Phrases
+computerScience <- c("algorithms", "data structures", "sorting", "recursion", "big data", "array", "tree", "stack", "queue", "graph", "hash table", "linked list", "heap", "artificial intelligence", "computer architecture", "greedy algorithm", "hill climbing", "simulated annealing", "dynamic programming", "functional programming", "programming", "machine learning", "p vs np", "halting problem", "concurrency", "multithreading", "parallelism", "race condition", "mutual exclusion", "semaphore", "binary", "deadlock", "brute-force attack", "social engineering", "security exploit", "security", "trojan horse", "rootkit", "cryptography", "symmetric cryptography", "asymmetric cryptography", "public key", "private key", "agile development", "software development", "software engineering", "software", "cognitive", "human-robot", "robot", "processing", "architecture", "architectures", "primitive", "agile", "data", "structure", "structures", "engineering", "exploit", "secure", "program", "run", "execute", "java", "python", "alan turing", "turing", "assembly", "c", "c++", "c#", "javascript", "version control", "network", "systems", "branch")
+
+#Top Chemistry Phrases
+chemistry <- c("review", "organic", "book", "synthesis", "catalyst", "reaction", "compd", "compounds", "reactions", "catalysis", "acid", "redn", "cleavage", "phase", "natural", "complex", "vol", "slide", "synthetic", "methods", "metal", "laboratory, "transfer), "substitution", "textbook", "reagent", "handbook", "prepn", "transition", "new"
+
+```
+
