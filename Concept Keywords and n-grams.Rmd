@@ -32,6 +32,12 @@ Computer Science Keywords - The Top Trends in Computer Science are:
   3. https://www.sciencedirect.com/science/article/pii/B9780128148167000054
   4. https://www.sciencedirect.com/science/article/pii/S026840121830077X 
   5. https://www.sciencedirect.com/science/article/pii/S0378512218301658 
+```{r}
+install.packages("plyr")
+library(plyr)
+
+```
+  
 ```{r setup, include=FALSE}
 #Top Computer Science Phrases
 computerScience <- c("algorithms", "data structures", "sorting", "recursion", "big data", "array", "tree", "stack", "queue", "graph", "hash table", "linked list", "heap", "artificial intelligence", "computer architecture", "greedy algorithm", "hill climbing", "simulated annealing", "dynamic programming", "functional programming", "programming", "machine learning", "p vs np", "halting problem", "concurrency", "multithreading", "parallelism", "race condition", "mutual exclusion", "semaphore", "binary", "deadlock", "brute-force attack", "social engineering", "security exploit", "security", "trojan horse", "rootkit", "cryptography", "symmetric cryptography", "asymmetric cryptography", "public key", "private key", "agile development", "software development", "software engineering", "software", "cognitive", "human-robot", "robot", "processing", "architecture", "architectures", "primitive", "agile", "data", "structure", "structures", "engineering", "exploit", "secure", "program", "run", "execute", "java", "python", "alan turing", "turing", "assembly", "c", "c++", "c#", "javascript", "version control", "network", "systems", "branch", "natural language processing", "processor", "NLP")
@@ -44,11 +50,36 @@ physics <- c("alloy", "antiferromagnetism", "compound", "crystal", "dislocation"
 
 ```
 
-Unique Elements in Concepts
-```{r}
-computerScience <- as.data.frame(unique(computerScience))
-chemistry <- as.data.frame(unique(chemistry))
-physics <- as.data.frame(unique(physics))
 
+```{r}
+#Computer Science Data Frame
+computerScience <- as.data.frame(unique(computerScience))
+csn <- length(computerScience)
+computerScienceTopic <- rep(1, csn)
+computerScience <- cbind(computerScience, computerScienceTopic)
+names(computerScience) <- c("Key", "Topic")
+
+#Chemistry Data Frame
+chemistry <- as.data.frame(unique(chemistry))
+cn <- length(chemistry)
+chemistryTopic <- rep(2, cn)
+chemistry <- cbind(chemistry, chemistryTopic)
+names(chemistry) <- c("Key", "Topic")
+
+#Physics Data Frame
+physics <- as.data.frame(unique(physics))
+pn <- length(physics)
+physicsTopic <- rep(3, pn)
+physics <- cbind(physics, physicsTopic)
+names(physics) <- c("Key", "Topic")
+
+#Concatenating All the Data Frames
+all = rbind(computerScience, chemistry, physics)
+write.csv(all, "topics.csv")
+```
+
+Converting to a CSV
+```{r}
+write.csv(all, "topics.csv")
 ```
 
