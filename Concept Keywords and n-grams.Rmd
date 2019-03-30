@@ -1,6 +1,6 @@
 ---
 title: "Concept Keywords and n-grams"
-author: "JuanD"
+author: "Juan D"
 date: "3/29/2019"
 output: html_document
 ---
@@ -32,24 +32,204 @@ Computer Science Keywords - The Top Trends in Computer Science are:
   3. https://www.sciencedirect.com/science/article/pii/B9780128148167000054
   4. https://www.sciencedirect.com/science/article/pii/S026840121830077X 
   5. https://www.sciencedirect.com/science/article/pii/S0378512218301658 
+  
+Installing Libraries
 ```{r}
 install.packages("plyr")
 library(plyr)
+install.packages("tm")
+library(tm)
+install.packages("wordcloud")
+library(wordcloud)
+install.packages("pdftools")
+library(pdftools)
+install.packages("tidyverse")
+library(tidyverse)
 
 ```
-  
+
+Generating Keywords and Phrases Manually
 ```{r setup, include=FALSE}
 #Top Computer Science Phrases
-computerScience <- c("algorithms", "data structures", "sorting", "recursion", "big data", "array", "tree", "stack", "queue", "graph", "hash table", "linked list", "heap", "artificial intelligence", "computer architecture", "greedy algorithm", "hill climbing", "simulated annealing", "dynamic programming", "functional programming", "programming", "machine learning", "p vs np", "halting problem", "concurrency", "multithreading", "parallelism", "race condition", "mutual exclusion", "semaphore", "binary", "deadlock", "brute-force attack", "social engineering", "security exploit", "security", "trojan horse", "rootkit", "cryptography", "symmetric cryptography", "asymmetric cryptography", "public key", "private key", "agile development", "software development", "software engineering", "software", "cognitive", "human-robot", "robot", "processing", "architecture", "architectures", "primitive", "agile", "data", "structure", "structures", "engineering", "exploit", "secure", "program", "run", "execute", "java", "python", "alan turing", "turing", "assembly", "c", "c++", "c#", "javascript", "version control", "network", "systems", "branch", "natural language processing", "processor", "NLP")
+computerScience <- c("algorithms", "data structures", "sorting", "recursion", "big data", "array", "tree", "stack", "queue", "graph", "hash table", "linked list", "heap", "artificial intelligence", "computer architecture", "greedy algorithm", "hill climbing", "simulated annealing", "dynamic programming", "functional programming", "programming", "machine learning", "p vs np", "halting problem", "concurrency", "multithreading", "parallelism", "race condition", "mutual exclusion", "semaphore", "binary", "deadlock", "brute-force attack", "social engineering", "security exploit", "security", "trojan horse", "rootkit", "cryptography", "symmetric cryptography", "asymmetric cryptography", "public key", "private key", "agile development", "software development", "software engineering", "software", "cognitive", "human-robot", "robot", "processing", "architecture", "architectures", "primitive", "agile", "data", "structure", "structures", "engineering", "exploit", "secure", "program", "run", "execute", "java", "python", "alan turing", "turing", "assembly", "c", "c++", "c#", "javascript", "version control", "network", "systems", "branch", "natural language processing", "processor", "nlp", "ai", "argumentation", "neural network")
 
 #Top Chemistry Phrases: https://pubs.acs.org/doi/pdf/10.1021/ci00030a002
-chemistry <- c("review", "organic", "book", "synthesis", "catalyst", "reaction", "compd", "compounds", "reactions", "catalysis", "acid", "redn", "cleavage", "phase", "natural", "complex", "vol", "slide", "synthetic", "methods", "metal", "laboratory", "transfer", "substitution", "textbook", "reagent", "handbook", "prepn", "transition", "new", "work", "group", "structure", "addn", "acids", "selective", "enzyme", "reagents", "syntheses", "techniques", "agent", "exchange", "cassette", "system", "application", "chemistry", "chem", "ketone", "carbonyl", "hydrogenation", "ed", "ester", "aldehyde", "chloride", "beilstein", "olefin", "carbon", "oxide", "Pt", "As", "halide", "sulfur", "polymer", "esters", "fluorination", "thiol", "isomerization", "carboxylic", "alkene", "catalytic", "oxidative", "alkyl", "allylic", "asym", "carbonylation", "alumina", "amine", "oxidation", "ether", "ylide", "epoxidn", "homologation", "aldehydes", "ketones", "cyclization", "amino" , "cyclic", "anion", "vanadium", "rhodium", "triphase", "catalyzed", "S", "hydrocarbon", "kinetics", "acid", "catalyst", "reaction", "synthesis", "derivatives", "prepn", "acids", "condensation", "compounds", "reactions", "addn", "salt", "purifn", "cleavage", "clompd", "crystal", "labeled", "review", "presence", "ring", "complex", "structure", "phase", "phenyl", "alkylation", "benzene", "phenol", "N", "aryl", "ether", "chloride", "arom", "substituted", "aromatic", "P", "ester", "alkyl", "herbicide", "xylene", "alpha", "aniline", "methyl", "O", "nitro", "benzyl", "beta", "amino","hydroxy", "hydrogenation", "rearrangement", "ketone", "carbon", "toluene", "esters", "sulfide", "chloro", "amine", "preparation", "insecticide", "fungicide", "chlorination", "substitution", "diphenyl", "anhydride", "oxime", "new", "antiinflamatory", "hydrocarbon", "styrene", "dimethyl", "phenoxy", "deriv", "cresol", "alloy", "metal", "review", "corrosion", "coating", "welding", "structure", "iron", "steel", "property", "fatigue", "deformation", "properties", "metals", "heat", "casting", "stress", "composite", "phase", "surface", "powder", "high", "electron", "treatment", "strength", "resistance", "temperature", "fracture", "friction", "creep", "diffusion", "wear", "materials", "grain", "internal", "mold", "film", "brass", "book", "thermal", "resistant", "hardening", "crack", "aging", "cast", "melting", "wire", "dislocation","tool", "mechanical", "temp", "transformation", "growth", "pressure", "solidicaton", "crystal", "formation", "molten", "rolling", "system", "addn", "low", "melt", "metallurgy", "cutting", "aluminum", "nickel", "copper", "titanium", "alloys", "molybdenum", "tungsten", "cobalt", "chromium", "carbide", "niobium", "zinc", "silicon", "zirconium", "silver", "hydrogen", "magnesium", "lead", "eutectic", "gold", "vanadium", "oxidn", "superalloy", "elec", "carbon", "tantalum", "manganese", "boron", "weld", "sintering", "plastic", "uranium", "bronze", "plasma", "electron", "proton", "neutron")
+chemistry <- c("review", "organic", "book", "synthesis", "catalyst", "reaction", "compd", "compounds", "reactions", "catalysis", "acid", "redn", "cleavage", "phase", "natural", "complex", "vol", "slide", "synthetic", "methods", "metal", "laboratory", "transfer", "substitution", "textbook", "reagent", "handbook", "prepn", "transition", "new", "work", "group", "structure", "addn", "acids", "selective", "enzyme", "reagents", "syntheses", "techniques", "agent", "exchange", "cassette", "system", "application", "chemistry", "chem", "ketone", "carbonyl", "hydrogenation", "ed", "ester", "aldehyde", "chloride", "beilstein", "olefin", "carbon", "oxide", "Pt", "As", "halide", "sulfur", "polymer", "esters", "fluorination", "thiol", "isomerization", "carboxylic", "alkene", "catalytic", "oxidative", "alkyl", "allylic", "asym", "carbonylation", "alumina", "amine", "oxidation", "ether", "ylide", "epoxidn", "homologation", "aldehydes", "ketones", "cyclization", "amino" , "cyclic", "anion", "vanadium", "rhodium", "triphase", "catalyzed", "S", "hydrocarbon", "kinetics", "acid", "catalyst", "reaction", "synthesis", "derivatives", "prepn", "acids", "condensation", "compounds", "reactions", "addn", "salt", "purifn", "cleavage", "clompd", "crystal", "labeled", "review", "presence", "ring", "complex", "structure", "phase", "phenyl", "alkylation", "benzene", "phenol", "N", "aryl", "ether", "chloride", "arom", "substituted", "aromatic", "P", "ester", "alkyl", "herbicide", "xylene", "alpha", "aniline", "methyl", "O", "nitro", "benzyl", "beta", "amino","hydroxy", "hydrogenation", "rearrangement", "ketone", "carbon", "toluene", "esters", "sulfide", "chloro", "amine", "preparation", "insecticide", "fungicide", "chlorination", "substitution", "diphenyl", "anhydride", "oxime", "new", "antiinflamatory", "hydrocarbon", "styrene", "dimethyl", "phenoxy", "deriv", "cresol", "alloy", "metal", "review", "corrosion", "coating", "welding", "structure", "iron", "steel", "property", "fatigue", "deformation", "properties", "metals", "heat", "casting", "stress", "composite", "phase", "surface", "powder", "high", "electron", "treatment", "strength", "resistance", "temperature", "fracture", "friction", "creep", "diffusion", "wear", "materials", "grain", "internal", "mold", "film", "brass", "book", "thermal", "resistant", "hardening", "crack", "aging", "cast", "melting", "wire", "dislocation","tool", "mechanical", "temp", "transformation", "growth", "pressure", "solidicaton", "crystal", "formation", "molten", "rolling", "system", "addn", "low", "melt", "metallurgy", "cutting", "aluminum", "nickel", "copper", "titanium", "alloys", "molybdenum", "tungsten", "cobalt", "chromium", "carbide", "niobium", "zinc", "silicon", "zirconium", "silver", "hydrogen", "magnesium", "lead", "eutectic", "gold", "vanadium", "oxidn", "superalloy", "elec", "carbon", "tantalum", "manganese", "boron", "weld", "sintering", "plastic", "uranium", "bronze", "plasma", "electron", "proton", "neutron", "molecular")
 
 #Top Physics Phrases: http://eprints.rclis.org/19814/1/112-dutta-en.pdf
 physics <- c("alloy", "antiferromagnetism", "compound", "crystal", "dislocation", "doping", "electricity", "electron", "exchange-interaction", "exciton", "fermion", "ferrimagnetism", "ferroelectricity", "helium", "impurity", "laser", "lattice", "magnetism", "metal", "nanostructured-material", "optics", "organic-compound", "paramagnetism", "phonon", "plasma physics", "plasmon", "quantum physics", "semiconductor", "superconductivity", "surface physics", "physics", "force", "propulsion", "thin film", "tunneling", "x-ray", "bose-einstein-condensation", "specific-heat", "conductivity, thermal", "band-structure", "quasiparticle", "particle", "argon", "flux-pinning", "cryogenics", "fermi-level", "fullerene", "fermi-surface", "boson-system", "fermi-liquid", "atmospheric science", "biomedical", "cellular biophysics", "circuit theory", "crystal", "image proessing", "laser", "magnetism", "nonlinear dynamics", "numerical analysis", "optics", "pattern formation", "plasma physics", "polymer", "quantum physics", "semiconductor", "surface science", "telecommunication", "acoustics", "astrophysical plasma", "cyclotron", "dielectric function", "dispersion", "doppler effect", "electricity", "electromagnetism", "electron", "magnetism", "microwave", "numerical analysis", "optics", "plasma physics") 
 
 ```
 
+Developing a Function to Parse Through Words
+```{r}
+topTokens <- function(abstract){
+  abstract_source <- VectorSource(abstract)
+corpus <- Corpus(abstract_source)
+corpus <- tm_map(corpus, content_transformer(tolower))
+corpus <- tm_map(corpus, removePunctuation)
+corpus <- tm_map(corpus, stripWhitespace)
+corpus <- tm_map(corpus, removeWords, stopwords("english"))
+dtm <- DocumentTermMatrix(corpus)
+dtm2 <- as.matrix(dtm)
+
+#Creating Frequency Tables
+frequency <- colSums(dtm2)
+frequency <- sort(frequency, decreasing = TRUE)
+frequency <- as.data.frame(frequency)
+topWords <- row.names(frequency)
+topWords <- topWords[1:10]
+}
+
+#Function to Tokenize a Paper and Return the Words of Paper in Order of Decreasing Occurence
+tokenElements <- function(abstract){
+  abstract_source <- VectorSource(abstract)
+corpus <- Corpus(abstract_source)
+corpus <- tm_map(corpus, content_transformer(tolower))
+corpus <- tm_map(corpus, removePunctuation)
+corpus <- tm_map(corpus, stripWhitespace)
+corpus <- tm_map(corpus, removeWords, stopwords("english"))
+dtm <- DocumentTermMatrix(corpus)
+dtm2 <- as.matrix(dtm)
+
+#Creating Frequency Tables
+frequency <- colSums(dtm2)
+frequency <- sort(frequency, decreasing = TRUE)
+frequency <- as.data.frame(frequency)
+topWords <- row.names(frequency)
+return(topWords)
+}
+
+#Creating Word Cloud
+#words <- names(frequency)
+#wordcloud(words[1:100], frequency[1:100])
+```
+
+Test Abstracts
+```{r}
+abstract <- ("Human–Robot Interaction challenges Artificial Intelligence in many regards: dynamic, partially unknown environments that were not originally designed for robots; a broad variety of situations with rich semantics to understand and interpret; physical interactions with humans that requires fine, low-latency yet socially acceptable control strategies; natural and multi-modal communication which mandates common-sense knowledge and the representation of possibly divergent mental models. This article is an attempt to characterise these challenges and to exhibit a set of key decisional issues that need to be addressed for a cognitive robot to successfully share space and tasks with a human. We identify first the needed individual and collaborative cognitive skills: geometric reasoning and situation assessment based on perspective-taking and affordance analysis; acquisition and representation of knowledge models for multiple agents (humans and robots, with their specificities); situated, natural and multi-modal dialogue; human-aware task planning; human–robot joint task achievement. The article discusses each of these abilities, presents working implementations, and shows how they combine in a coherent and original deliberative architecture for human–robot interaction. Supported by experimental results, we eventually show how explicit knowledge management, both symbolic and geometric, proves to be instrumental to richer and more natural human–robot interactions by pushing for pervasive, human-level semantics within the robot's deliberative system.")
+
+abstract2 <- ("Over the last ten years, argumentation has come to be increasingly central as a core study within Artificial Intelligence (AI). The articles forming this volume reflect a variety of important trends, developments, and applications covering a range of current topics relating to the theory and applications of argumentation. Our aims in this introduction are, firstly, to place these contributions in the context of the historical foundations of argumentation in AI and, subsequently, to discuss a number of themes that have emerged in recent years resulting in a significant broadening of the areas in which argumentation based methods are used. We begin by presenting a brief overview of the issues of interest within the classical study of argumentation: in particular, its relationship—in terms of both similarities and important differences—to traditional concepts of logical reasoning and mathematical proof. We continue by outlining how a number of foundational contributions provided the basis for the formulation of argumentation models and their promotion in AI related settings and then consider a number of new themes that have emerged in recent years, many of which provide the principal topics of the research presented in this volume.")
+
+abstract3 <- ("In this survey, we review work in machine learning on methods for handling data sets containing large amounts of irrelevant information. We focus on two key issues: the problem of selecting relevant features, and the problem of selecting relevant examples. We describe the advances that have been made on these topics in both empirical and theoretical work in machine learning, and we present a general framework that we use to compare different methods. We close with some challenges for future work in this area.")
+
+```
+
+```{r}
+#Checking to See if the Paper Tokens is Contained in the Topic Vector and Returning the Topic 
+topicModel <- function(abstract){
+tokens <- tokenElements(abstract)
+CS = 0
+CH = 0
+PH = 0
+topic = ""
+for (n in tokens){
+  if (is.element(tolower(n), computerScience)){
+    CS = CS + 1
+  }
+  else if (is.element(tolower(n), chemistry)){
+    CH = CH + 1
+  }
+  else if(is.element(tolower(n), physics)){
+    PH = PH + 1
+  }
+  else{
+  }
+}
+if (CS > CH & CS > PH){
+  topic = "Computer Science"
+}
+else if (CH > CS & CH > PH){
+  topic = "Chemistry"
+}
+else{
+  topic = "Physics"
+}
+return(paste(CS, CH, PH, topic))
+}
+```
+
+Returning Biography by Random Index
+```{r}
+CSBio <- c("John Doe", "Sam Doe", "Jake Doe", "Dan Doe", "David Doe", "Frank Doe", "Gill Doe")
+CHEMBio <- c("John Doe", "Sam Doe", "Jake Doe", "Dan Doe", "David Doe", "Frank Doe", "Gill Doe")
+PhysBio <- c("John Doe", "Sam Doe", "Jake Doe", "Dan Doe", "David Doe", "Frank Doe", "Gill Doe")
+
+returnBio <- function(abstract){
+  topic <- topicModel(abstract)
+  if (is.element(topic, "Computer Science")){
+    n <- sample(1:length(CSBio), 1)
+    return(paste(topic,CSBio[n]))
+  }
+  else if(is.element(topic, "Chemistry")){
+    n <- sample(1:length(CHEMBio), 1)
+    return(paste(topic,CHEMBio[n]))
+  }
+  else{
+    n <- sample(1:length(PhysBio), 1)
+    return(paste(topic,PhysBio[n]))
+  }
+}
+  
+```
+
+Grabbing PDF Files and Adding Keywords with Automation
+```{r}
+
+#folder <- file.path(" /Users/juandjuwadi/Documents/INATopics/Physics", ".pdf")
+#list.files()
+
+physicsFiles <- list.files(path = "/Users/juandjuwadi/Documents/INATopics/Physics")
+csFiles <- list.files(path = "/Users/juandjuwadi/Documents/INATopics/ComputerScience")
+chemFiles <- list.files(path = "/Users/juandjuwadi/Documents/INATopics/Chemistry")
+
+
+addPhysKeyWords <- function(files){
+  topic = ""
+  for (n in files){
+  text = pdf_text(paste("/Users/juandjuwadi/Documents/INATopics/Physics/",n, sep = ""))
+  topKeyWords <- tokenElements(text)
+  topKeyWords <- topKeyWords[1:10]
+  topic <- append(topic, topKeyWords)
+  }
+  return(topic)
+}
+
+addCSKeyWords <- function(files){
+  topic = ""
+  for (n in files){
+  text = pdf_text(paste("/Users/juandjuwadi/Documents/INATopics/ComputerScience/",n, sep = ""))
+  topKeyWords <- tokenElements(text)
+  topKeyWords <- topKeyWords[1:10]
+  topic <- append(topic, topKeyWords)
+  }
+  return(topic)
+}
+
+addChemKeyWords <- function(files){
+  topic = ""
+  for (n in files){
+  text = pdf_text(paste("/Users/juandjuwadi/Documents/INATopics/Chemistry/",n, sep = ""))
+  topKeyWords <- tokenElements(text)
+  topKeyWords <- topKeyWords[1:10]
+  topic <- append(topic, topKeyWords)
+  }
+  return(topic)
+}
+
+```
+
+Adding new Keywords to Original Topic Vectors
+```{r}
+newPhysKeyWords <- addPhysKeyWords(physicsFiles)
+physics <- append(physics, newPhysKeyWords)
+
+newCSKeyWords <- addCSKeyWords(csFiles)
+computerScience <- append(computerScience, newCSKeyWords)
+
+newChemKeyWords <- addChemKeyWords(chemFiles)
+chemistry <- append(chemistry, newChemKeyWords)
+```
 
 ```{r}
 #Computer Science Data Frame
@@ -75,11 +255,16 @@ names(physics) <- c("Key", "Topic")
 
 #Concatenating All the Data Frames
 all = rbind(computerScience, chemistry, physics)
-write.csv(all, "topics.csv")
 ```
 
 Converting to a CSV
 ```{r}
 write.csv(all, "topics.csv")
 ```
+
+Testing Model Accuracy
+```{r}
+
+```
+
 
