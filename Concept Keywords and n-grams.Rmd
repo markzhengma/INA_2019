@@ -2,7 +2,10 @@
 title: "Concept Keywords and n-grams"
 author: "Juan D"
 date: "3/29/2019"
-output: html_document
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
 ---
 Computer Science Keywords - The Top Trends in Computer Science are:
 1. Artificial Intelligence and Robotics
@@ -51,7 +54,7 @@ library(tidyverse)
 Generating Keywords and Phrases Manually
 ```{r setup, include=FALSE}
 #Top Computer Science Phrases
-computerScience <- c("algorithms", "data structures", "sorting", "recursion", "big data", "array", "tree", "stack", "queue", "graph", "hash table", "linked list", "heap", "artificial intelligence", "computer architecture", "greedy algorithm", "hill climbing", "simulated annealing", "dynamic programming", "functional programming", "programming", "machine learning", "p vs np", "halting problem", "concurrency", "multithreading", "parallelism", "race condition", "mutual exclusion", "semaphore", "binary", "deadlock", "brute-force attack", "social engineering", "security exploit", "security", "trojan horse", "rootkit", "cryptography", "symmetric cryptography", "asymmetric cryptography", "public key", "private key", "agile development", "software development", "software engineering", "software", "cognitive", "human-robot", "robot", "processing", "architecture", "architectures", "primitive", "agile", "data", "structure", "structures", "engineering", "exploit", "secure", "program", "run", "execute", "java", "python", "alan turing", "turing", "assembly", "c", "c++", "c#", "javascript", "version control", "network", "systems", "branch", "natural language processing", "processor", "nlp", "ai", "argumentation", "neural network")
+computerScience <- c("algorithms", "data structures", "sorting", "recursion", "big data", "array", "tree", "stack", "queue", "graph", "hash table", "linked list", "heap", "artificial intelligence", "computer architecture", "greedy algorithm", "hill climbing", "simulated annealing", "dynamic programming", "functional programming", "programming", "machine learning", "p vs np", "halting problem", "concurrency", "multithreading", "parallelism", "race condition", "mutual exclusion", "semaphore", "binary", "deadlock", "brute-force attack", "social engineering", "security exploit", "security", "trojan horse", "rootkit", "cryptography", "symmetric cryptography", "asymmetric cryptography", "public key", "private key", "agile development", "software development", "software engineering", "software", "cognitive", "human-robot", "robot", "processing", "architecture", "architectures", "primitive", "agile", "data", "structure", "structures", "engineering", "exploit", "secure", "program", "run", "execute", "java", "python", "alan turing", "turing", "assembly", "c", "c++", "c#", "javascript", "version control", "network", "systems", "branch", "natural language processing", "processor", "nlp", "ai", "argumentation", "neural network", "computer")
 
 #Top Chemistry Phrases: https://pubs.acs.org/doi/pdf/10.1021/ci00030a002
 chemistry <- c("review", "organic", "book", "synthesis", "catalyst", "reaction", "compd", "compounds", "reactions", "catalysis", "acid", "redn", "cleavage", "phase", "natural", "complex", "vol", "slide", "synthetic", "methods", "metal", "laboratory", "transfer", "substitution", "textbook", "reagent", "handbook", "prepn", "transition", "new", "work", "group", "structure", "addn", "acids", "selective", "enzyme", "reagents", "syntheses", "techniques", "agent", "exchange", "cassette", "system", "application", "chemistry", "chem", "ketone", "carbonyl", "hydrogenation", "ed", "ester", "aldehyde", "chloride", "beilstein", "olefin", "carbon", "oxide", "Pt", "As", "halide", "sulfur", "polymer", "esters", "fluorination", "thiol", "isomerization", "carboxylic", "alkene", "catalytic", "oxidative", "alkyl", "allylic", "asym", "carbonylation", "alumina", "amine", "oxidation", "ether", "ylide", "epoxidn", "homologation", "aldehydes", "ketones", "cyclization", "amino" , "cyclic", "anion", "vanadium", "rhodium", "triphase", "catalyzed", "S", "hydrocarbon", "kinetics", "acid", "catalyst", "reaction", "synthesis", "derivatives", "prepn", "acids", "condensation", "compounds", "reactions", "addn", "salt", "purifn", "cleavage", "clompd", "crystal", "labeled", "review", "presence", "ring", "complex", "structure", "phase", "phenyl", "alkylation", "benzene", "phenol", "N", "aryl", "ether", "chloride", "arom", "substituted", "aromatic", "P", "ester", "alkyl", "herbicide", "xylene", "alpha", "aniline", "methyl", "O", "nitro", "benzyl", "beta", "amino","hydroxy", "hydrogenation", "rearrangement", "ketone", "carbon", "toluene", "esters", "sulfide", "chloro", "amine", "preparation", "insecticide", "fungicide", "chlorination", "substitution", "diphenyl", "anhydride", "oxime", "new", "antiinflamatory", "hydrocarbon", "styrene", "dimethyl", "phenoxy", "deriv", "cresol", "alloy", "metal", "review", "corrosion", "coating", "welding", "structure", "iron", "steel", "property", "fatigue", "deformation", "properties", "metals", "heat", "casting", "stress", "composite", "phase", "surface", "powder", "high", "electron", "treatment", "strength", "resistance", "temperature", "fracture", "friction", "creep", "diffusion", "wear", "materials", "grain", "internal", "mold", "film", "brass", "book", "thermal", "resistant", "hardening", "crack", "aging", "cast", "melting", "wire", "dislocation","tool", "mechanical", "temp", "transformation", "growth", "pressure", "solidicaton", "crystal", "formation", "molten", "rolling", "system", "addn", "low", "melt", "metallurgy", "cutting", "aluminum", "nickel", "copper", "titanium", "alloys", "molybdenum", "tungsten", "cobalt", "chromium", "carbide", "niobium", "zinc", "silicon", "zirconium", "silver", "hydrogen", "magnesium", "lead", "eutectic", "gold", "vanadium", "oxidn", "superalloy", "elec", "carbon", "tantalum", "manganese", "boron", "weld", "sintering", "plastic", "uranium", "bronze", "plasma", "electron", "proton", "neutron", "molecular")
@@ -127,13 +130,11 @@ for (n in tokens){
   if (is.element(tolower(n), computerScience)){
     CS = CS + 1
   }
-  else if (is.element(tolower(n), chemistry)){
+  if (is.element(tolower(n), chemistry)){
     CH = CH + 1
   }
-  else if(is.element(tolower(n), physics)){
+  if(is.element(tolower(n), physics)){
     PH = PH + 1
-  }
-  else{
   }
 }
 if (CS > CH & CS > PH){
@@ -145,7 +146,13 @@ else if (CH > CS & CH > PH){
 else{
   topic = "Physics"
 }
-return(paste(CS, CH, PH, topic))
+probabilityCS = (CS / (CS + CH + PH)) * 100
+probabilityCS = round(probabilityCS, digits = 2)
+probabilityCHEM = (CH/ (CS + CH + PH)) * 100
+probabilityCHEM = round(probabilityCHEM, digits = 2)
+probabilityPHYS = (PH / (CS + CH + PH)) * 100
+probabilityPHYS = round(probabilityPHYS, digits = 2)
+return(paste(CS, probabilityCS, CH, probabilityCHEM, PH, probabilityPHYS, topic))
 }
 ```
 
@@ -262,9 +269,17 @@ Converting to a CSV
 write.csv(all, "topics.csv")
 ```
 
-Testing Model Accuracy
+Testing the Model for CS Accuracy
 ```{r}
+testCSFiles <- list.files(path = "/Users/juandjuwadi/Documents/INATopics/Testing/Papers")
+testCSModel <- function(files){
+  for (n in files){
+  text = pdf_text(paste("/Users/juandjuwadi/Documents/INATopics/Testing/Papers/",n, sep = ""))
+  topic <- topicModel(text)
+  print(topic)
+  }
+}
 
+#100% Accuracy Rate!!!
 ```
-
 
