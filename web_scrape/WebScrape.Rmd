@@ -1,0 +1,65 @@
+---
+title: "WebScrape"
+author: "Sherry Feng"
+date: "4/6/2019"
+output: html_document
+---
+
+#installing libraries
+```{r}
+install.packages("XML")
+install.packages("RCurl")
+install.packages("rvest")
+
+```
+
+
+#load libraries
+```{r}
+library(XML)
+library(RCurl)
+library(rvest)
+
+```
+```
+
+#Get one URL - library(rvest)
+```{r}
+
+url <- 'https://impacteen.uic.edu/generalarea_PDFs/Eff-ttePrices.pdf'
+
+download.file(url, destfile ="./download_name.pdf")
+
+#webpage <- read_html(url)
+```
+
+#Loop through a list of PDF files - development process
+```{r}
+
+library(XML)
+library(RCurl)
+
+#url <- "https://www.bot.or.th/English/MonetaryPolicy/Northern/EconomicRep#ort/Pages/Releass_Economic_north.aspx"
+url = "https://www.bot.or.th/English/MonetaryPolicy/Southern/_layouts/application/BOTNews/News.aspx?catID=2&group=South"
+page   <- getURL(url)
+parsed <- htmlParse(page)
+links  <- xpathSApply(parsed, path="//a", xmlGetAttr, "href")
+inds   <- grep("*.pdf", links)
+links  <- links[inds]
+
+regex_match <- regexpr("[^/]+$", links, perl=TRUE)
+destination <- regmatches(links, regex_match)
+
+for(i in seq(links)){
+  if( is.null(links[i]) == FALSE){
+     print("link ")
+     print(links[i])
+  }
+  print("\n")
+  print("destination ")
+  print(destination[i])
+  #download.file(links[i], destfile=destination[i])
+ # Sys.sleep(runif(1, 1, 5))
+}
+
+#download.file(links, destfile = destination)
