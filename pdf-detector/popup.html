@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+    <head>
+        <style>
+            body{
+                width: 200px;
+                height: 200px;
+            }
+            #after-login-div{
+                height: 0;
+                overflow: hidden;
+                transition: height 0.5s;
+            }
+            #before-login-div{
+                height: 200px;
+                overflow: hidden;
+                transition: height 0.5s;
+            }
+            #login-div{
+                align-items: center;
+                height: 0;
+                overflow: hidden;
+                transition: height 0.5s;
+            }
+            #reg-div{
+                align-items: center;
+                height: 0;
+                overflow: hidden;
+                transition: height 0.5s;
+            }
+            #login-btn-div{
+                height: 30px;
+                overflow: hidden;
+                transition: height 0.5s;
+            }
+            #reg-btn-div{
+                height: 30px;
+                overflow: hidden;
+                transition: height 0.5s;
+            }
+            #login-form{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            #reg-form{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            
+        </style>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+            <![endif]-->
+            <div id = "before-login-div">
+                <div id = "login-btn-div">
+                    <button id = "login-btn">Login</button>
+                </div>
+                <div id = "login-div">
+                    <form id = "login-form">
+                        <input id = "login-username" placeholder="username" type="text">
+                        <input id = "login-password" placeholder="password" type="password">
+                        <input id = "login-submit-btn" type="button" value = "Login">
+                    </form>
+                </div>
+                <div id = "reg-btn-div">
+                    <button id = "reg-btn">Register</button>
+                </div>
+                <div id = "reg-div">
+                    <form id = "reg-form">
+                        <input id = "reg-username" placeholder="username" type="text">
+                        <input id = "reg-password" placeholder="password" type="password">
+                        <input id = "reg-race" placeholder = "ethnicity" type = "text">
+                        <input id = "reg-gender" placeholder = "gender" type = "text">
+                        <input id = "reg-submit-btn" type="button" value = "Register">
+                    </form>
+                </div>
+            </div>
+            <div id = "after-login-div">
+                Welcome, you lil nerd.
+            </div>
+            
+            <!-- <script type="text/javascript" src="popup.js"></script> -->
+        </body>
+        </html>

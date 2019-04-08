@@ -3,7 +3,8 @@
   "name": "pdf-detector",
   "description": "detect pdf and html...",
   "version": "1.0",
-  "browser_action": {},
+  "browser_action": {
+  },
   "permissions": ["tabs"],
   "background": {
     "scripts": ["background.js"],
