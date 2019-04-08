@@ -26,7 +26,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
     if(!document.getElementById("user-div")){
       var userDiv = document.createElement("DIV");
       userDiv.setAttribute("style", 
-      "height: fit-content; width: 180px; position: absolute; top: 0; right: 0; background: rgba(0, 0, 0, 0.7); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; padding: 5px;");
+      "height: fit-content; width: 180px; position: absolute; top: 0; right: 0; background: rgba(0, 0, 0, 0.7); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; padding: 5px; border: 2px solid white;");
       userDiv.setAttribute("id", "user-div");
 
       if(auth == false){
@@ -196,7 +196,7 @@ oReq.addEventListener('load', function() {
           }
           var bioDiv = document.createElement("DIV");
           bioDiv.setAttribute("style", 
-                              "height: fit-content; width: 180px; position: absolute; top: 30vh; right: 0; background: rgba(0, 0, 0, 0.7); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; padding: 5px;");
+                              "height: fit-content; width: 180px; position: absolute; top: 30vh; right: 0; background: rgba(0, 0, 0, 0.7); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; padding: 5px; border: 2px solid white;");
   
           var bioName = document.createElement("H4");
           bioName.innerHTML = response.bioName;
@@ -208,15 +208,21 @@ oReq.addEventListener('load', function() {
           bioPic.style.width = "100px";
           bioPic.style.position = "center";
           bioPic.style.backgroundSize = "cover";
+          bioPic.style.borderRadius = "20px 0";
+          bioPic.style.border = "2px solid white"
           bioDiv.appendChild(bioPic);
   
           var birthBD = document.createElement("P");
           birthBD.innerHTML = response.bioBD;
           bioDiv.appendChild(birthBD);
-  
+          
+          var bioSucDiv = document.createElement("DIV");
+          bioSucDiv.style.borderBottom = "2px solid white";
+          bioSucDiv.style.width = "180px";
           var bioSuc = document.createElement("P");
           bioSuc.innerHTML = response.bioSuc;
-          bioDiv.appendChild(bioSuc);
+          bioSucDiv.appendChild(bioSuc);
+          bioDiv.appendChild(bioSucDiv);
   
           var bioLink = document.createElement("A");
           bioLink.innerHTML = "More";
