@@ -111,18 +111,47 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
         var regForm = document.createElement("FORM");
         regForm.setAttribute("style",
         "display: flex; flex-direction: column; justify-content: center;");
+
         var usernameRegInput = document.createElement("INPUT");
         usernameRegInput.setAttribute("placeholder", "username");
+        usernameRegInput.setAttribute("type", "text");
         regForm.appendChild(usernameRegInput);
+
         var passwordRegInput = document.createElement("INPUT");
         passwordRegInput.setAttribute("placeholder", "password");
+        passwordRegInput.setAttribute("type", "password");
         regForm.appendChild(passwordRegInput);
-        var raceRegInput = document.createElement("INPUT");
-        raceRegInput.setAttribute("placeholder", "race");
+
+        var raceRegInput = document.createElement("SELECT");
+        var aaOption = document.createElement("option");
+        aaOption.setAttribute("value", "African American");
+        aaOption.innerHTML = "African American";
+        raceRegInput.appendChild(aaOption);
+        var latOption = document.createElement("option");
+        latOption.setAttribute("value", "Latin");
+        latOption.innerHTML = "Latin";
+        raceRegInput.appendChild(latOption);
+        var otherOption = document.createElement("option");
+        otherOption.setAttribute("value", "Other");
+        otherOption.innerHTML = "Other";
+        raceRegInput.appendChild(otherOption);
         regForm.appendChild(raceRegInput);
-        var genderRegInput = document.createElement("INPUT");
-        genderRegInput.setAttribute("placeholder", "gender");
+
+        var genderRegInput = document.createElement("SELECT");
+        var maleOption = document.createElement("option");
+        maleOption.setAttribute("value", "Male");
+        maleOption.innerHTML = "Male";
+        genderRegInput.appendChild(maleOption);
+        var femaleOption = document.createElement("option");
+        femaleOption.setAttribute("value", "Female");
+        femaleOption.innerHTML = "Female";
+        genderRegInput.appendChild(femaleOption);
+        var otherOption = document.createElement("option");
+        otherOption.setAttribute("value", "Other");
+        otherOption.innerHTML = "Other";
+        genderRegInput.appendChild(otherOption);
         regForm.appendChild(genderRegInput);
+
         var btnRegInput = document.createElement("INPUT");
         btnRegInput.setAttribute("type", "button");
         btnRegInput.setAttribute("value", "Register");
@@ -184,59 +213,157 @@ oReq.addEventListener('load', function() {
     }
   )
   if (isPdfFile(this, url)) {
-    console.log("is pdf, url: " + url);
-    chrome.runtime.sendMessage(
-      {type: 'PDF', url: url}, 
-      function(response){
-        console.log(response);
-          function setAttributes(el, attrs) {
-            for(var key in attrs) {
-              el.setAttribute(key, attrs[key]);
-            }
-          }
-          var bioDiv = document.createElement("DIV");
-          bioDiv.setAttribute("style", 
-                              "height: fit-content; width: 180px; position: absolute; top: 30vh; right: 0; background: rgba(0, 0, 0, 0.7); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; padding: 5px; border: 2px solid white;");
-  
-          var bioName = document.createElement("H4");
-          bioName.innerHTML = response.bioName;
-          bioDiv.appendChild(bioName);
-  
-          var bioPic = document.createElement("DIV");
-          bioPic.style.backgroundImage = `url(${response.bioPic})`;
-          bioPic.style.height = "100px";
-          bioPic.style.width = "100px";
-          bioPic.style.position = "center";
-          bioPic.style.backgroundSize = "cover";
-          bioPic.style.borderRadius = "20px 0";
-          bioPic.style.border = "2px solid white"
-          bioDiv.appendChild(bioPic);
-  
-          var birthBD = document.createElement("P");
-          birthBD.innerHTML = response.bioBD;
-          bioDiv.appendChild(birthBD);
-          
-          var bioSucDiv = document.createElement("DIV");
-          bioSucDiv.style.borderBottom = "2px solid white";
-          bioSucDiv.style.width = "180px";
-          var bioSuc = document.createElement("P");
-          bioSuc.innerHTML = response.bioSuc;
-          bioSucDiv.appendChild(bioSuc);
-          bioDiv.appendChild(bioSucDiv);
-  
-          var bioLink = document.createElement("A");
-          bioLink.innerHTML = "More";
-          bioLink.style.color = "white";
-          setAttributes(bioLink, {
-            "href": response.bioLink,
-            "target": "_blank"
-            // "style": "height: 30px; width: 50px; background-color: black; ",
-          });
-          bioDiv.appendChild(bioLink)
-  
-          document.body.appendChild(bioDiv);
+    oReq.open("GET", "http://localhost:5218/topic?abstract=" + url);
+    oReq.send();
+    var topic = "";
+    oReq.onreadystatechange = (e) => {
+      switch (oReq.responseText){
+        case '["Physics"]':
+          topic = "ph";
+          console.log(topic);
+          sendDataToBackend();
+          break;
+        case '["Chemistry"]':
+          topic = "ch";
+          console.log(topic);
+          sendDataToBackend();
+          break;
+        case '["Computer Science"]':
+          topic = "cs";
+          console.log(topic);
+          sendDataToBackend();
+          break;
+        default:
+          break;
       }
-    );
+    }
+    var callTimes = 0;
+    console.log("is pdf, url: " + url);
+    function sendDataToBackend(){
+      if(callTimes === 0){
+        callTimes += 1;
+        console.log(callTimes);
+        chrome.runtime.sendMessage(
+          {type: 'PDF', url: url, topic: topic}, 
+          function(response){
+            console.log(response);
+              function setAttributes(el, attrs) {
+                for(var key in attrs) {
+                  el.setAttribute(key, attrs[key]);
+                }
+              }
+              var bioDiv = document.createElement("DIV");
+              bioDiv.setAttribute("style", 
+                                  "height: fit-content; width: 200px; position: absolute; top: 30vh; right: 0; background: rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px; border: 2px solid white; overflow: hidden; transition: width 0.5s;");
+            
+              var bioPic = document.createElement("DIV");
+              bioPic.style.backgroundImage = `url(${response.bioPic})`;
+              bioPic.style.height = "120px";
+              bioPic.style.width = "120px";
+              bioPic.style.marginTop = "50px";
+              bioPic.style.position = "center";
+              bioPic.style.backgroundSize = "cover";
+              bioPic.style.borderRadius = "50%";
+              bioPic.style.border = "2px solid white"
+              bioDiv.appendChild(bioPic);
+              
+              var bioTitle = document.createElement("DIV");
+              bioTitle.style.paddingTop = "20px";
+              bioTitle.style.paddingBottom = "20px";
+              bioTitle.style.paddingLeft = "10px";
+              bioTitle.style.backgroundColor = "white";
+              bioTitle.style.marginTop = "20px";
+              bioTitle.style.marginBottom = "20px";
+              bioTitle.style.width = "90%";
+              var bioName = document.createElement("B");
+              bioName.innerHTML = response.bioName;
+              bioTitle.appendChild(bioName);
+              var bioJob = document.createElement("SMALL");
+              bioJob.innerHTML = "<br/>" + response.bioSuc;
+              bioTitle.appendChild(bioJob);
+              bioDiv.appendChild(bioTitle);
+
+              var bioDesc = document.createElement("DIV");
+              bioDesc.style.paddingTop = "10px";
+              bioDesc.style.paddingBottom = "10px";
+              bioDesc.style.paddingLeft = "10px";
+              bioDesc.style.backgroundColor = "white";
+              bioDesc.style.marginBottom = "20px";
+              bioDesc.style.width = "90%";
+              bioDesc.style.fontSize = "11px";
+
+              bioDesc.innerHTML = "<b>Ethnicity Affiliation: </b>" + response.bioRace + "<br/>" + "<b>Gender: </b>" + response.bioGender + "<br/>" + "<b>Birth Date: </b>" + response.bioBD + "<br/><br/><br/>" + response.bioSuc;
+              var showStr = false;
+              bioDesc.addEventListener("click", function(){
+                if(showStr === false){
+                  showStr = true;
+                  bioDesc.style.fontSize = "13px";
+                  bioDesc.innerHTML = response.bioStr;
+                }else if(showStr === true){
+                  showStr = false;
+                  bioDesc.style.fontSize = "11px";
+                  bioDesc.innerHTML = "<b>Ethnicity Affiliation: </b>" + response.bioRace + "<br/>" + "<b>Gender: </b>" + response.bioGender + "<br/>" + "<b>Birth Date: </b>" + response.bioBD + "<br/><br/><br/>" + response.bioSuc;
+                }
+              })
+              bioDesc.addEventListener("mouseover", function(){
+                bioDesc.style.backgroundColor = "rgba(255, 255, 255, 0.7)";
+                bioDesc.style.cursor = "pointer";
+              })
+              bioDesc.addEventListener("mouseout", function(){
+                bioDesc.style.backgroundColor = "white";
+              })
+              
+              bioDiv.appendChild(bioDesc);
+
+              // var birthBD = document.createElement("P");
+              // birthBD.innerHTML = response.bioBD;
+              // bioDiv.appendChild(birthBD);
+              
+              // var bioSucDiv = document.createElement("DIV");
+              // bioSucDiv.style.borderBottom = "2px solid white";
+              // bioSucDiv.style.width = "180px";
+              // var bioSuc = document.createElement("P");
+              // bioSuc.innerHTML = response.bioSuc;
+              // bioSucDiv.appendChild(bioSuc);
+              // bioSucDiv.addEventListener("click", function(){
+              //   if(bioSuc.innerHTML == response.bioSuc){
+              //     bioSuc.innerHTML = response.bioStr;
+              //   }else if(bioSuc.innerHTML == response.bioStr){
+              //     bioSuc.innerHTML = response.bioSuc;
+              //   }
+              // })
+              // bioSucDiv.addEventListener("mouseover", function(){
+              //   bioSucDiv.style.backgroundColor = "rgba(255, 255, 255, 0.7)";
+              //   bioSucDiv.style.cursor = "pointer";
+              // })
+              // bioSucDiv.addEventListener("mouseout", function(){
+              //   bioSucDiv.style.backgroundColor = "rgba(0, 0, 0, 0)";
+              // })
+              // bioDiv.appendChild(bioSucDiv);
+      
+              // var bioLink = document.createElement("A");
+              // bioLink.innerHTML = "More";
+              // bioLink.style.color = "white";
+              // setAttributes(bioLink, {
+              //   "href": bioLink,
+              //   "target": "_blank"
+              //   // "style": "height: 30px; width: 50px; background-color: black; ",
+              // });
+              // bioDiv.appendChild(bioLink)
+    
+              // var bioIframe = document.createElement("IFRAME");
+              // bioIframe.src = "localhost:5218/topic?abstract=" + url;
+              // bioIframe.style.height = 0;
+              // bioIframe.style.width = 0;
+              // bioIframe.style.frameBorder = 0;
+              // bioDiv.appendChild(bioIframe);
+      
+              document.body.appendChild(bioDiv);
+          }
+        );
+      }
+    }
+    
   } else {
     console.log("is html");
     chrome.runtime.sendMessage({type: 'HTML'});

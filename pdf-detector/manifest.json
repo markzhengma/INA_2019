@@ -5,7 +5,7 @@
   "version": "1.0",
   "browser_action": {
   },
-  "permissions": ["tabs"],
+  "permissions": ["tabs", "http://localhost/*"],
   "background": {
     "scripts": ["background.js"],
     "persistent": false
@@ -16,5 +16,5 @@
       "js": ["content.js"]
     }
   ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.gstatic.com/ https://cdn.firebase.com https://*.firebaseio.com; object-src 'self'"
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.gstatic.com/ https://cdn.firebase.com https://*.firebaseio.com https://ajax.googleapis.com https://www.opencpu.org; object-src 'self'"
 }

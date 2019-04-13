@@ -106,16 +106,25 @@ chrome.runtime.onMessage.addListener(
 
     // chrome.browserAction.setBadgeText({text: request.type});
     if(request.type == "PDF"){
+      console.log(request.topic);
       var resData = {};
       if(userData.gender == "Female"){
         dbRef.orderByChild("bioGender").equalTo("f").once('value')
         .then(function(snapshot){
           // Object.entries(snapshot.val());
-          // console.log(Object.entries(snapshot.val())[0][1])
-          var randomIndex = Math.floor(Math.random() * Object.entries(snapshot.val()).length);
-          console.log(Object.entries(snapshot.val())[randomIndex][1] || "not retreived.");
-          resData = Object.entries(snapshot.val())[randomIndex][1];
-          // chrome.runtime.sendMessage({resData: resData});
+            // console.log(Object.entries(snapshot.val())[0][1])
+            var snapshotArr = Object.entries(snapshot.val());
+            var selectedSnapshot = [];
+            console.log(snapshotArr);
+            for(var i = 0; i < snapshotArr.length; i ++){
+              if(snapshotArr[i][1].bioField == request.topic){
+                selectedSnapshot.push(snapshotArr[i]);
+              }
+            }
+            var randomIndex = Math.floor(Math.random() * selectedSnapshot.length);
+            console.log(selectedSnapshot[randomIndex][1] || "not retreived.");
+            resData = selectedSnapshot[randomIndex][1];
+            // chrome.runtime.sendMessage({resData: resData});
         })
         .then(function(){
         //   if(resData){
@@ -135,32 +144,77 @@ chrome.runtime.onMessage.addListener(
         //   }
         })
       }else{
-        dbRef.orderByChild("bioRace").equalTo(userData.race).once('value')
-        .then(function(snapshot){
-          // Object.entries(snapshot.val());
-          // console.log(Object.entries(snapshot.val())[0][1])
-          var randomIndex = Math.floor(Math.random() * Object.entries(snapshot.val()).length);
-          console.log(Object.entries(snapshot.val())[randomIndex][1] || "not retreived.");
-          resData = Object.entries(snapshot.val())[randomIndex][1];
-          // chrome.runtime.sendMessage({resData: resData});
-        })
-        .then(function(){
-        //   if(resData){
-            sendResponse({
-              bioName: resData.bioName,
-              bioPic: resData.bioPic,
-              bioBD: resData.bioBD,
-              bioSuc: resData.bioSuc,
-              bioStr: resData.bioStr,
-              bioLink: resData.bioLink,
-              bioRace: resData.bioRace,
-              bioGender: resData.bioGender,
-              bioField: resData.bioField
-            });
-        //   }else{
-        //     console.log("no data response from firebase");
-        //   }
-        })
+        if(userData.race == "African American" || userData.race == "Latin"){
+          dbRef.orderByChild("bioRace").equalTo(userData.race).once('value')
+          .then(function(snapshot){
+            // Object.entries(snapshot.val());
+            // console.log(Object.entries(snapshot.val())[0][1])
+            var snapshotArr = Object.entries(snapshot.val());
+            var selectedSnapshot = [];
+            console.log(snapshotArr);
+            for(var i = 0; i < snapshotArr.length; i ++){
+              if(snapshotArr[i][1].bioField == request.topic){
+                selectedSnapshot.push(snapshotArr[i]);
+              }
+            }
+            var randomIndex = Math.floor(Math.random() * selectedSnapshot.length);
+            console.log(selectedSnapshot[randomIndex][1] || "not retreived.");
+            resData = selectedSnapshot[randomIndex][1];
+            // chrome.runtime.sendMessage({resData: resData});
+          })
+          .then(function(){
+          //   if(resData){
+              sendResponse({
+                bioName: resData.bioName,
+                bioPic: resData.bioPic,
+                bioBD: resData.bioBD,
+                bioSuc: resData.bioSuc,
+                bioStr: resData.bioStr,
+                bioLink: resData.bioLink,
+                bioRace: resData.bioRace,
+                bioGender: resData.bioGender,
+                bioField: resData.bioField
+              });
+          //   }else{
+          //     console.log("no data response from firebase");
+          //   }
+          })
+        }else{
+          dbRef.orderByChild("bioField").equalTo(request.topic).once('value')
+          .then(function(snapshot){
+            // Object.entries(snapshot.val());
+            // console.log(Object.entries(snapshot.val())[0][1])
+            var snapshotArr = Object.entries(snapshot.val());
+            console.log(snapshotArr);
+            var randomIndex = Math.floor(Math.random() * snapshotArr.length);
+            resData = snapshotArr[randomIndex][1];
+            console.log(resData || "not retreived.");
+            // chrome.runtime.sendMessage({resData: resData});
+          })
+          .then(function(){
+          //   if(resData){
+              var bioGender = "Other";
+              if(resData.bioGender == "m"){
+                bioGender = "Male";
+              }else if(resData.bioGender == "f"){
+                bioGender = "Female";
+              };
+              sendResponse({
+                bioName: resData.bioName,
+                bioPic: resData.bioPic,
+                bioBD: resData.bioBD,
+                bioSuc: resData.bioSuc,
+                bioStr: resData.bioStr,
+                bioLink: resData.bioLink,
+                bioRace: resData.bioRace,
+                bioGender: bioGender,
+                bioField: resData.bioField
+              });
+          //   }else{
+          //     console.log("no data response from firebase");
+          //   }
+          })
+        }
       }
       console.log(request.url);
     }
